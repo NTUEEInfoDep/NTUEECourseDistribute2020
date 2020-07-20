@@ -1,3 +1,8 @@
+# Ignore all files in "data/" folder
+data/*
+# Except one dummy file to keep the folder
+!data/dummy.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
