@@ -64,7 +64,7 @@
 跑以下指令
 
 ```
-python distribute.py
+python main.py
 ```
 
 把`secret-data/`資料夾裡的`results.csv`給學術部。
