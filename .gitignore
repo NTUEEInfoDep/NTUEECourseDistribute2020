@@ -1,7 +1,7 @@
-# Ignore all files in "data/" folder
-data/*
+# Ignore all files in "secret-data/" folder
+secret-data/*
 # Except one dummy file to keep the folder
-!data/dummy.txt
+!secret-data/dummy.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

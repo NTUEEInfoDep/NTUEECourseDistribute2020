@@ -1,0 +1,137 @@
+[
+  {
+    "id": "Electronics-one",
+    "name": "電子學（一）",
+    "type": "必修",
+    "options": {
+      "吳肇欣": {
+        "limit": 55
+      },
+      "林宗賢": {
+        "limit": 55
+      },
+      "呂良鴻": {
+        "limit": 55
+      },
+      "林致廷": {
+        "limit": 55
+      }
+    }
+  },
+  {
+    "id": "Electormagnetics-one",
+    "name": "電磁學一",
+    "type": "必修",
+    "options": {
+      "周錫增": {
+        "limit": 50
+      },
+      "林晃巖": {
+        "limit": 50
+      },
+      "鄭宇翔": {
+        "limit": 50
+      },
+      "林怡成": {
+        "limit": 50
+      },
+      "李俊興": {
+        "limit": 50
+      }
+    }
+  },
+  {
+    "id": "Linear-Algebra",
+    "name": "工程數學-線性代數",
+    "type": "必修",
+    "options": {
+      "林茂昭": {
+        "limit": 55
+      },
+      "蘇柏青": {
+        "limit": 55
+      },
+      "李宏毅": {
+        "limit": 55
+      },
+      "楊東霖": {
+        "limit": 55
+      }
+    }
+  },
+  {
+    "id": "Differential-Equation",
+    "name": "工程數學-微分方程",
+    "type": "必修",
+    "options": {
+      "林清富": {
+        "limit": 55
+      },
+      "黃天偉": {
+        "limit": 55
+      },
+      "黃定洧": {
+        "limit": 55
+      },
+      "丁建均": {
+        "limit": 55
+      }
+    }
+  },
+  {
+    "id": "Algorithm",
+    "name": "演算法",
+    "type": "必修",
+    "options": {
+      "張耀文": {
+        "limit": 80
+      },
+      "李建模": {
+        "limit": 80
+      }
+    }
+  },
+  {
+    "id": "Ten-Select-Two",
+    "name": "十選二實驗",
+    "type": "十選二",
+    "options": {
+      "電力電子": {
+        "limit": 24,
+        "priority": false
+      },
+      "自動控制": {
+        "limit": 20,
+        "priority": false
+      },
+      "嵌入式系統": {
+        "limit": 24,
+        "priority": false
+      },
+      "電磁波": {
+        "limit": 24,
+        "priority": 3
+      },
+      "半導體": {
+        "limit": 12,
+        "priority": 3
+      },
+      "通信專題": {
+        "limit": 30,
+        "priority": false
+      },
+      "網路與多媒體": {
+        "limit": 24,
+        "priority": false
+      },
+      "生醫工程": {
+        "limit": 30,
+        "priority": false
+      },
+      "光電": {
+        "limit": 30,
+        "priority": 4
+      }
+    }
+  }
+]
