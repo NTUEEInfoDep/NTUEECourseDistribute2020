@@ -4,9 +4,15 @@
 
 [預選網站 repo](https://github.com/NTUEEInfoDep/NTUEECourseWebsite2020)
 
+## Maintainer
+
+[劉奇聖](https://github.com/MortalHappiness), email: `b07901069@ntu.edu.tw`
+
+有找到 bug 的話歡迎大家發 issue 或寄信給我。
+
 ## Usage
 
-把預選網站匯出的`selections.json`放進`secret-data/`資料夾裡，格式如下：
+把預選網站匯出的 `selections.json` 放進 `secret-data/` 資料夾裡，格式如下：
 
 ```
 [
@@ -26,11 +32,13 @@
 ]
 ```
 
+其中 Array 裡的內容是該學生選擇的選項照志願序排序，選項必須在 [courses.json](/data/courses.json) 的 options 裡。
+
 ---
 
 今年的特殊規則：三保一
 
-請將已選上的人們寫成`preselect.json`，放進`secret-data/`資料夾裡，格式如下：
+請將已選上的人們寫成 `preselect.json` ，放進 `secret-data/` 資料夾裡，格式如下：
 
 ```
 {
@@ -41,11 +49,11 @@
 }
 ```
 
-註：數電實驗比較特別，不在`courses.json`十選二的`options`裡。
+註：數電實驗比較特別，不在 `courses.json` 十選二的 `options` 裡。
 
 ---
 
-準備好`courses.json`，格式請參考[這裡](/data/courses.json)。
+準備好 `courses.json` ，格式請參考[這裡](/data/courses.json)。
 
 說明：
 
@@ -67,6 +75,8 @@
 python main.py
 ```
 
-把`secret-data/`資料夾裡的`results.csv`給學術部。
+把 `secret-data/` 資料夾裡的 `results.csv` 給學術部。
+
+註：另外還會生成一份 `analysis.csv`，顯示有幾個人中第幾志願，一併交給學術部。
 
 ## 演算法
