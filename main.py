@@ -238,6 +238,59 @@ def read_preselect():
 # ========================================
 
 
+def analyze(courses):
+    students = read_selections()
+    preselect = read_preselect()
+
+    students_dict = dict()
+    for student in students:
+        students_dict[student["userID"]] = student
+
+    course_analyses = dict()
+    for course in courses:
+        competitors = dict()
+        for student_id, student in students_dict.items():
+            selection = student["selections"][course._id]
+            if selection:
+                competitors[student_id] = set()
+        course_analyses[course._name] = competitors
+
+    for course in courses:
+        for option in course._options.values():
+            for student_id in option._students:
+                if (student_id in preselect and
+                        option._name in preselect[student_id]):
+                    continue
+                student = students_dict[student_id]
+                selection = student["selections"][course._id]
+                wish_idx = selection.index(option._name)
+                course_analyses[course._name][student_id].add(wish_idx + 1)
+
+    rows = list()
+    # 有人中到的最大志願
+    max_wish = 1
+    for students in course_analyses.values():
+        for wishes in students.values():
+            if not wishes:
+                continue
+            max_wish = max(max_wish, max(wishes))
+    header = ["課程名稱", "中0個", "中1個", "中2個"]
+    header.extend([f"第{i}志願" for i in range(1, max_wish + 1)])
+    rows.append(header)
+    for course_name, students in course_analyses.items():
+        row = [0] * len(header)
+        row[0] = course_name
+        for wishes in students.values():
+            assert len(wishes) <= 2, "max wish is 2"
+            row[len(wishes) + 1] += 1
+            for wish in wishes:
+                row[wish + 3] += 1
+        rows.append(row)
+    with open('./secret-data/analysis.csv', 'w', newline='') as fout:
+        writer = csv.writer(fout)
+        writer.writerows(rows)
+
+
 def main():
     courses = read_courses()
     students = read_selections()
@@ -258,6 +311,8 @@ def main():
     with open("secret-data/result.csv", "w", newline="") as fout:
         writer = csv.writer(fout)
         writer.writerows(rows)
+
+    analyze(courses)
 
 # ========================================
 
