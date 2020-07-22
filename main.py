@@ -1,3 +1,4 @@
+from prettytable import PrettyTable
 import random
 import heapq
 import json
@@ -124,7 +125,6 @@ class Course:
             self._options[name] = option
 
     def distribute(self, students, preselect):
-        print(f"分發： {self._name}...")
         competitors = dict()
         for student in students:
             selection = student["selections"][self._id]
@@ -276,6 +276,7 @@ def analyze(courses):
             max_wish = max(max_wish, max(wishes))
     header = ["課程名稱", "中0個", "中1個", "中2個"]
     header.extend([f"第{i}志願" for i in range(1, max_wish + 1)])
+    print("不包含數電、三保一:")
     rows.append(header)
     for course_name, students in course_analyses.items():
         row = [0] * len(header)
@@ -286,9 +287,41 @@ def analyze(courses):
             for wish in wishes:
                 row[wish + 3] += 1
         rows.append(row)
+    print_table(rows)
+
+    print("包含數電、三保一之後的十選二(不含只報名數電沒選十選二的):")
+    ten_select_two = course_analyses["十選二實驗"]
+    for student_id in preselect:
+        for option in preselect[student_id]:
+            if option == "數電實驗":
+                continue
+            wishes = students_dict[student_id]["selections"]["Ten-Select-Two"]
+            wish_idx = wishes.index(option)
+            assert (wish_idx + 1) not in ten_select_two[student_id]
+            ten_select_two[student_id].add(wish_idx + 1)
+    rows1 = list()
+    rows1.append(header)
+    row = [0] * len(header)
+    row[0] = "十選二實驗"
+    for wishes in ten_select_two.values():
+        assert len(wishes) <= 2, "max wish is 2"
+        row[len(wishes) + 1] += 1
+        for wish in wishes:
+            row[wish + 3] += 1
+    rows1.append(row)
+    print_table(rows1)
+
     with open('./secret-data/analysis.csv', 'w', newline='') as fout:
         writer = csv.writer(fout)
         writer.writerows(rows)
+
+
+def print_table(table):
+    x = PrettyTable()
+    x.field_names = table[0]
+    for row in table[1:]:
+        x.add_row(row)
+    print(x)
 
 
 def main():
