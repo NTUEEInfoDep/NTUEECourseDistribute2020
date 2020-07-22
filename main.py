@@ -1,6 +1,7 @@
 import random
 import heapq
 import json
+import csv
 
 # ========================================
 
@@ -122,11 +123,7 @@ class Course:
                 raise ValueError("Invalid course type!")
             self._options[name] = option
 
-    def distribure(self, students):
-
-        if self._id != "Electronics-one":
-            return
-
+    def distribure(self, students, preselect):
         print(f"分發： {self._name}...")
         competitors = dict()
         for student in students:
@@ -138,11 +135,19 @@ class Course:
                     "num": 0,  # 這個學生已經選中幾個選項
                 }
 
+        # 處理三保一、數電等先抽的課
+        if self._id == "Ten-Select-Two":
+            self.deal_with_preselect(preselect, competitors)
+
+        # 分發開始
         wish_index = 0  # 現在正在排的是第幾志願
         while competitors:
             # 把大家的志願填進選項裡
             for student_id, student_data in competitors.items():
                 wish = student_data["selection"][wish_index]
+                # 以下這兩行是三保一的特殊處理
+                if wish is None:
+                    continue
                 if self._options[wish].add_student(student_id, student_data):
                     student_data["num"] += 1
             # 如果選項爆了的話要抽籤
@@ -162,8 +167,50 @@ class Course:
                 del competitors[student_id]
             wish_index += 1
 
+    def deal_with_preselect(self, preselect, competitors):
+        """
+        處理三保一、數電等先抽的課
+
+        Note: competitors will be modified
+        """
+        # 把中數電的人填進數電實驗
+        self._options["數電實驗"] = Option("數電實驗", 99999, False)
+        to_be_delete = list()
+        for student_id, option_names in preselect.items():
+            if "數電實驗" in option_names:
+                self._options["數電實驗"]._students.append(student_id)
+                if student_id in competitors:
+                    competitors[student_id]["num"] += 1
+                option_names.remove("數電實驗")
+        for student_id, option_names in preselect.items():
+            if not option_names:
+                to_be_delete.append(student_id)
+        for student_id in to_be_delete:
+            del preselect[student_id]
+
+        # 處理三保一
+        for student_id, option_names in preselect.items():
+            student_data = competitors[student_id]
+            for option_name in option_names:
+                self._options[option_name].add_student(student_id, student_data)
+                student_data["num"] += 1
+                # 把原志願序的該格變成None
+                idx = student_data["selection"].index(option_name)
+                student_data["selection"][idx] = None
+
         for option in self._options.values():
-            print(option._name, option._students)
+            reject = option.recover_from_full()
+            assert reject == [], "preselect should not be rejected"
+
+        # 清理(把已經得到最大可中選項的人或已經用完志願的人移除)
+        to_be_delete = list()
+        for student_id, student_data in competitors.items():
+            if student_data["num"] > self._max_select:
+                raise ValueError("num exceeds max_select")
+            if student_data["num"] == self._max_select:
+                to_be_delete.append(student_id)
+        for student_id in to_be_delete:
+            del competitors[student_id]
 
 
 # ========================================
@@ -177,8 +224,16 @@ def read_courses():
 
 def read_selections():
     with open('./secret-data/selections.json') as fin:
-        selections = json.load(fin)
-    return selections
+        students = json.load(fin)
+    for student in students:
+        student["userID"] = student["userID"].upper()
+    return students
+
+
+def read_preselect():
+    with open('./secret-data/preselect.json') as fin:
+        preselect = json.load(fin)
+    return preselect
 
 # ========================================
 
@@ -186,9 +241,23 @@ def read_selections():
 def main():
     courses = read_courses()
     students = read_selections()
+    preselect = read_preselect()
     for course in courses:
-        course.distribure(students)
-    # print(selections)
+        course.distribure(students, preselect)
+
+    # export
+    rows = list()
+    rows.append(["student_id", "course_name", "teacher"])
+    for course in courses:
+        for option in course._options.values():
+            for student_id in sorted(option._students):
+                if course._id == "Ten-Select-Two":
+                    rows.append([student_id, option._name, ""])
+                else:
+                    rows.append([student_id, course._name, option._name])
+    with open("secret-data/result.csv", "w", newline="") as fout:
+        writer = csv.writer(fout)
+        writer.writerows(rows)
 
 # ========================================
 
