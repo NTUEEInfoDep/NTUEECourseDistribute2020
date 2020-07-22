@@ -73,7 +73,7 @@ class Option:
         # priority越大越優先
         priority = 0
         # 超過4年級算4年級
-        grade = max(student_data["grade"], 4)
+        grade = min(student_data["grade"], 4)
 
         # 調整priority
         if self._priority is True:
@@ -123,7 +123,7 @@ class Course:
                 raise ValueError("Invalid course type!")
             self._options[name] = option
 
-    def distribure(self, students, preselect):
+    def distribute(self, students, preselect):
         print(f"分發： {self._name}...")
         competitors = dict()
         for student in students:
@@ -243,7 +243,7 @@ def main():
     students = read_selections()
     preselect = read_preselect()
     for course in courses:
-        course.distribure(students, preselect)
+        course.distribute(students, preselect)
 
     # export
     rows = list()
