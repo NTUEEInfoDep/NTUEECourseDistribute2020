@@ -32,7 +32,7 @@
 ]
 ```
 
-其中 Array 裡的內容是該學生選擇的選項照志願序排序，選項必須在 [courses.json](/data/courses.json) 的 options 裡。
+其中 Array 裡的內容是該學生選擇的選項(String)照志願序排序，選項必須在 [courses.json](/data/courses.json) 的 options 裡。
 
 ---
 
