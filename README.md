@@ -104,3 +104,33 @@ python main.py
 Example：
 
 假設你的第 1 志願電力電子，第 2 志願半導體，第 3 志願電磁波，如果三保一中半導體且沒有退選，則算你選中一個。在"拿大家的第 1 志願起來排"的階段如果電力電子需要抽籤，則你的優先度會以(-10) 去和別人競爭。在"拿大家的第 2 志願起來排"的階段因為你的第 2 志願被設成 None 故會被直接跳過。
+
+### 優先度抽籤(詳細實作請看 PrioritySampler class)
+
+假設有這些學生要抽籤(key: 學號, value: 優先度)，名額有 3 個
+
+```
+{
+  "BAAAAAAAA": 0,
+  "BBBBBBBBB": 0,
+  "BCCCCCCCC": 4,
+  "BDDDDDDDD" -10,
+  "BEEEEEEEE": 4,
+}
+```
+
+首先把相同優先度的學生 group 在一起，變成：
+
+```
+{
+  0: ["BAAAAAAAA", "BBBBBBBBB"],
+  4: ["BCCCCCCCC", "BEEEEEEEE"],
+  -10: ["BDDDDDDDD"],
+}
+```
+
+接著從中拿出優先度最高的 group，即是 4 那個 group，因此 "BCCCCCCCC" 和 "BEEEEEEEE" 都會被選上，剩下一個名額。
+
+接著取出優先度第 2 高的 group，即 0 那個 group，裡面有兩個人但只剩一個名額，故隨機抽籤二選一，假設選到 "BBBBBBBBB" 。
+
+此時已沒有名額，故選上的學生為 "BBBBBBBBB"，"BCCCCCCCC", "BEEEEEEEE" 這 3 個。
