@@ -53,7 +53,7 @@
 
 ---
 
-準備好 `courses.json` ，格式請參考[這裡](/data/courses.json)或[過往資料](/courses_history)。
+準備好 `courses.json` ，格式請參考[這裡](/data/courses.json)或[過往資料](/course_history)。
 
 說明：
 
