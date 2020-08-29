@@ -77,7 +77,7 @@ python main.py
 
 把 `secret-data/` 資料夾裡的 `results.csv` 給學術部。
 
-註：另外還會生成一份 `analysis.csv`，顯示有幾個人中第幾志願(不含數電和三保一)，一併交給學術部。
+把 output 截圖一起給學術部。
 
 ## 演算法
 
